@@ -1,3 +1,14 @@
+from dotenv import load_dotenv
+
+
+
+
+
+load_dotenv()
+
+
+
+
 # This is a sample Python script.
 
 # Press Ctrl+F5 to execute it or replace it with your code.
