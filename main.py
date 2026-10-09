@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+from graph.graph import app
 
 
 # This is a sample Python script.
@@ -20,5 +20,8 @@ load_dotenv()
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print("Working?","Yesssirr")
+    print(app.invoke({
+        "question": "What is an agent memory?"
+    }))
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
