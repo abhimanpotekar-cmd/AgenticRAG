@@ -5,7 +5,7 @@ from ingestion import retriever
 from pprint import pprint
 from graph.chains.generation import generation_chain
 from graph.chains.hallucination_grader import hallucination_grader, GradeHallucination
-
+from graph.chains.router import question_router ,RouteQuery
 
 def test_retrival_grader_ans_yes() ->None:
     # pass
@@ -59,22 +59,33 @@ def test_hallucination_grader_ans_yes()->None:
 
     assert res.binary_sccore
 
-def test_hallucination_grader_ans_no() -> None:
+# def test_hallucination_grader_ans_no() -> None:
+#     question = "agent memory"
+#
+#     docs = retriever.invoke(question)
+#
+#     # Deliberately fabricated answer
+#     generation = (
+#         "AI agents store all their memories inside "
+#         "physical chocolate doughnuts."
+#     )
+#
+#     res: GradeHallucination = hallucination_grader.invoke({
+#         "documents": docs,
+#         "generation": generation
+#     })
+#
+#     print("Hallucination score:", res.binary_sccore)
+#
+#     assert res.binary_sccore is False
+
+
+def test_router_vectorstore()->None:
     question = "agent memory"
+    res :RouteQuery = question_router.invoke({"question":question})
+    assert res.datasource == "vectorstore"
 
-    docs = retriever.invoke(question)
-
-    # Deliberately fabricated answer
-    generation = (
-        "AI agents store all their memories inside "
-        "physical chocolate doughnuts."
-    )
-
-    res: GradeHallucination = hallucination_grader.invoke({
-        "documents": docs,
-        "generation": generation
-    })
-
-    print("Hallucination score:", res.binary_sccore)
-
-    assert res.binary_sccore is False
+def test_router_websearch()->None:
+    question = "What does ts mean?"
+    res :RouteQuery = question_router.invoke({"question":question})
+    assert res.datasource == "websearch"

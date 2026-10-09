@@ -9,7 +9,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash-lite")
 class GradeHallucination(BaseModel):
     """Binary score for hallucination present in the generated answer"""
 
-    binary_sccore:bool =Field(
+    binary_score:bool =Field(
         description="BAnswer is grounded in the facts 'yes' or 'no'",
     )
 

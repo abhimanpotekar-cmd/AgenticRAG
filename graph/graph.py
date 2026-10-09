@@ -10,6 +10,8 @@ from graph.state import GraphState
 from graph.chains.hallucination_grader import hallucination_grader
 from graph.chains.answer_grader import answer_grader
 
+from graph.chains.router import RouteQuery , question_router
+
 def decide_to_generate(state:GraphState):
     print("="*10,"Access Granted","="*10)
     if state["web_search"]:
@@ -46,13 +48,30 @@ def grade_generated_answer_in_documents_and_question(state:GraphState)->str:
         print("---DECISION: GENERATION IS NOT GROUNDED IN DOCUMENTS, RE-TRY---")
         return "not supported"
 
+def route_question(state:GraphState)->str:
+    print("="*10,"Route Question","="*10)
+    question=state["question"]
+    source:RouteQuery = question_router.invoke({"question":question})
+    if source.datasource==WEBSEARCH:
+        print("-"*10,"Route Question Web Search","-"*10)
+        return WEBSEARCH
+    elif source.datasource=="vectorstore":
+        print("-"*10,"Route Question Vectorstore","-"*10)
+        return RETRIEVE
+
+
 
 workflow=StateGraph(GraphState)
 workflow.add_node(RETRIEVE,retrieve)
 workflow.add_node(GRADE_DOCUMENTS,grade_documents)
 workflow.add_node(WEBSEARCH,web_search)
 workflow.add_node(GENERATE, generate)
-workflow.set_entry_point(RETRIEVE)
+
+workflow.set_conditional_entry_point(route_question,{
+    WEBSEARCH:WEBSEARCH,
+    RETRIEVE:RETRIEVE,
+})
+
 workflow.add_edge(RETRIEVE,GRADE_DOCUMENTS)
 workflow.add_conditional_edges(GRADE_DOCUMENTS,decide_to_generate,{
     WEBSEARCH:WEBSEARCH,

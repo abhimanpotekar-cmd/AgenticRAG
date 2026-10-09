@@ -18,10 +18,11 @@ from graph.graph import app
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print("Working?","Yesssirr")
-    print(app.invoke({
-        "question": "What is an agent memory?"
-    }))
+if __name__ == "__main__":
+    result = app.invoke({
+        "question": "How to make Pizza"
+    })
 
+    print("\n========== FINAL ANSWER ==========")
+    print(result["generation"])
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
