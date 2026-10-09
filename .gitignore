@@ -117,6 +117,7 @@ venv.bak/
 # Windows
 Thumbs.db
 
+rag_graph.png
 # Local Chroma vector database
 .chroma/
 uv.lock
