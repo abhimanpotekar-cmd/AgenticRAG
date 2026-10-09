@@ -117,5 +117,6 @@ venv.bak/
 # Windows
 Thumbs.db
 
-
+# Local Chroma vector database
+.chroma/
 uv.lock
